@@ -136,7 +136,39 @@ section{min-height:100vh;position:relative;display:flex;flex-direction:column;ju
 .pvb{background:rgba(45,134,200,.1);border:1px solid rgba(45,134,200,.25);color:var(--a1);border-radius:50px;padding:.32rem .85rem;font-size:.74rem;font-weight:700;cursor:pointer;transition:all .25s;font-family:'DM Sans',sans-serif}
 .pvb:hover{background:var(--a1);color:white;border-color:var(--a1)}
 
-/* ── GALERÍA ── */
+/* ── ANIMALES GRID RESPONSIVE ── */
+#animalesGrid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:.9rem;
+  margin-top:3rem;
+}
+.acard{
+  cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:.65rem;padding:1.4rem 1rem;
+  background:#fff;border:1.5px solid rgba(45,134,200,.15);border-radius:16px;
+  transition:all .35s;box-shadow:0 2px 14px rgba(30,70,120,.08);
+  text-align:center;overflow:hidden;min-width:0;
+}
+.acard.span2{grid-column:span 2}
+.acard:hover{transform:translateY(-6px) scale(1.03);border-color:#2e86c8;background:rgba(45,134,200,.05);box-shadow:0 12px 35px rgba(30,70,120,.15)}
+.acard-emoji{font-size:3rem;line-height:1;transition:transform .35s;display:block;flex-shrink:0}
+.acard:hover .acard-emoji{transform:scale(1.2) rotate(-8deg)}
+.acard-name{color:#1a2535;font-size:.92rem;font-weight:700;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%}
+.acard-sub{color:#3d5166;font-size:.72rem;display:block;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.acard-cta{color:#2e86c8;font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-top:.2rem}
+@media(max-width:900px){
+  #animalesGrid{grid-template-columns:repeat(2,1fr)}
+  .acard.span2{grid-column:span 1}
+}
+@media(max-width:480px){
+  #animalesGrid{grid-template-columns:repeat(2,1fr);gap:.6rem}
+  .acard{padding:1rem .7rem;gap:.5rem}
+  .acard-emoji{font-size:2.2rem}
+  .acard-name{font-size:.82rem}
+  .acard-sub{display:none}
+}
 #galeria{background:var(--w)}
 #galeria .pbg{background-image:url('https://images.unsplash.com/photo-1552053831-71594a27632d?w=1600&q=80');opacity:.04}
 #galeria .pov{background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(240,244,248,.97))}
@@ -191,7 +223,7 @@ section{min-height:100vh;position:relative;display:flex;flex-direction:column;ju
 .vl{background:rgba(122,184,232,.07);border:1px solid rgba(122,184,232,.14);border-radius:14px;padding:1rem 1.2rem;display:flex;align-items:center;gap:.8rem;transition:all .3s;cursor:default}
 .vl:hover{background:rgba(122,184,232,.14);border-color:var(--a3);transform:translateX(5px)}
 .vl span{font-size:1.4rem}
-.vl strong{font-size:.85rem;color:rgba(19, 18, 18, 0.85)}
+.vl strong{font-size:.85rem;color:rgba(12, 12, 12, 0.85)}
 
 /* ── CONTACTO ── */
 #contacto{background:var(--dark2)}
@@ -474,27 +506,46 @@ footer span{color:var(--a3)}
 <script>
 /* ── PRODUCTOS ── */
 const prods=[
-  {e:'🦴',n:'Croquetas Premium Adulto',p:'$349 MXN',d:'Fórmula balanceada con proteína de pollo real, sin colorantes. Ideal para perros adultos de todas las razas.'},
-  {e:'🐟',n:'Alimento Gato Salmón',p:'$289 MXN',d:'Alimento húmedo con salmón real y vegetales. Alto en omega-3 para piel y pelaje radiante.'},
-  {e:'🎾',n:'Set Juguetes Interactivos',p:'$199 MXN',d:'Kit de 4 juguetes de distintas texturas. Estimula la mente y el instinto de caza de tu mascota.'},
-  {e:'🧴',n:'Shampoo Hipoalergénico',p:'$159 MXN',d:'Fórmula suave con aloe vera y lavanda. Sin sulfatos ni parabenos. Para piel sensible.'},
-  {e:'🦟',n:'Collar Antipulgas 8 meses',p:'$249 MXN',d:'Protección 8 meses contra pulgas, garrapatas y mosquitos. Resistente al agua.'},
-  {e:'💊',n:'Vitaminas Multivitamínico',p:'$379 MXN',d:'Masticables sabor pollo. Fortalece huesos, sistema inmune y energía. 60 tabletas.'},
-  {e:'🛁',n:'Bañera Plegable',p:'$449 MXN',d:'Portátil con drenaje y base antideslizante. Compatible con perros pequeños y medianos.'},
-  {e:'🏠',n:'Casa con Cojín Lavable',p:'$599 MXN',d:'Refugio suave y cálido con cojín desmontable lavable. Diseño moderno para tu hogar.'},
-  {e:'🪮',n:'Cepillo Deslanador Pro',p:'$189 MXN',d:'Acero inoxidable que reduce pelo suelto hasta 90%. Seguro y cómodo para cualquier raza.'},
-  {e:'🎀',n:'Kit Accesorios Glamour',p:'$129 MXN',d:'Lazo, collar ajustable y plaquita personalizable. Para lucir increíble en cada paseo.'},
+  // img: pon la ruta de tu imagen en el campo "img"
+  {img:'https://images.unsplash.com/photo-1601758174774-d533b313a050?w=400&q=80',n:'Croquetas Premium Adulto',p:'$349 MXN',d:'Fórmula balanceada con proteína de pollo real, sin colorantes. Ideal para perros adultos de todas las razas.'},
+  {img:'https://images.unsplash.com/photo-1589924691995-400dc9ecc119?w=400&q=80',n:'Alimento Gato Salmón',p:'$289 MXN',d:'Alimento húmedo con salmón real y vegetales. Alto en omega-3 para piel y pelaje radiante.'},
+  {img:'https://images.unsplash.com/photo-1581888227599-779811939961?w=400&q=80',n:'Set Juguetes Interactivos',p:'$199 MXN',d:'Kit de 4 juguetes de distintas texturas. Estimula la mente y el instinto de caza de tu mascota.'},
+  {img:'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?w=400&q=80',n:'Shampoo Hipoalergénico',p:'$159 MXN',d:'Fórmula suave con aloe vera y lavanda. Sin sulfatos ni parabenos. Para piel sensible.'},
+  {img:'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&q=80',n:'Collar Antipulgas 8 meses',p:'$249 MXN',d:'Protección 8 meses contra pulgas, garrapatas y mosquitos. Resistente al agua.'},
+  {img:'https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?w=400&q=80',n:'Vitaminas Multivitamínico',p:'$379 MXN',d:'Masticables sabor pollo. Fortalece huesos, sistema inmune y energía. 60 tabletas.'},
+  {img:'https://images.unsplash.com/photo-1548767797-d8c844163c4a?w=400&q=80',n:'Bañera Plegable',p:'$449 MXN',d:'Portátil con drenaje y base antideslizante. Compatible con perros pequeños y medianos.'},
+  {img:'https://images.unsplash.com/photo-1560807707-8cc77767d783?w=400&q=80',n:'Casa con Cojín Lavable',p:'$599 MXN',d:'Refugio suave y cálido con cojín desmontable lavable. Diseño moderno para tu hogar.'},
+  {img:'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&q=80',n:'Cepillo Deslanador Pro',p:'$189 MXN',d:'Acero inoxidable que reduce pelo suelto hasta 90%. Seguro y cómodo para cualquier raza.'},
+  {img:'https://images.unsplash.com/photo-1574158622682-e40e69881006?w=400&q=80',n:'Kit Accesorios Glamour',p:'$129 MXN',d:'Lazo, collar ajustable y plaquita personalizable. Para lucir increíble en cada paseo.'},
 ];
 const pg=document.getElementById('pg');
 prods.forEach((p,i)=>{
   const c=document.createElement('div');c.className='pc';
-  c.innerHTML=`<div class="pci"><span>${p.e}</span></div><div class="pin"><h3>${p.n}</h3><p>${p.d.slice(0,52)}…</p><div class="pb2"><span class="pp">${p.p}</span><button class="pvb" onclick="event.stopPropagation();openM(${i})">Ver más</button></div></div>`;
-  c.onclick=()=>openM(i);pg.appendChild(c);
+  c.innerHTML=`
+    <div class="pci" style="overflow:hidden;position:relative">
+      <img src="${p.img}" alt="${p.n}"
+        style="width:100%;height:100%;object-fit:cover;transition:transform .5s;display:block"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:3rem;background:var(--dark2)">🛍️</div>
+    </div>
+    <div class="pin">
+      <h3>${p.n}</h3>
+      <p>${p.d.slice(0,52)}…</p>
+      <div class="pb2">
+        <span class="pp">${p.p}</span>
+        <button class="pvb" onclick="event.stopPropagation();openM(${i})">Ver más</button>
+      </div>
+    </div>`;
+  c.addEventListener('mouseenter',()=>{const img=c.querySelector('img');if(img)img.style.transform='scale(1.08)';});
+  c.addEventListener('mouseleave',()=>{const img=c.querySelector('img');if(img)img.style.transform='';});
+  c.onclick=()=>openM(i);
+  pg.appendChild(c);
 });
 
 function openM(i){
   const p=prods[i];
-  document.getElementById('mi').textContent=p.e;
+  const mi=document.getElementById('mi');
+  mi.innerHTML=`<img src="${p.img}" alt="${p.n}" style="width:100%;height:100%;object-fit:cover" onerror="this.outerHTML='<span style=\'font-size:5rem\'>🛍️</span>'">`;
   document.getElementById('mn').textContent=p.n;
   document.getElementById('mpr').textContent=p.p;
   document.getElementById('md').textContent=p.d;
@@ -518,17 +569,18 @@ const animales = [
 ];
 
 const ag = document.getElementById('animalesGrid');
-// Rebuild the grid with 4-col layout supporting span-2
-ag.style.cssText = 'display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin-top:3rem';
 
 animales.forEach((a,i) => {
   const d = document.createElement('div');
-  d.className = 'gi';
-  d.style.cssText = `cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;padding:1.5rem;min-height:160px;background:#fff;border:1.5px solid rgba(45,134,200,.15);border-radius:16px;transition:all .35s;box-shadow:0 2px 14px rgba(30,70,120,.08);${a.span===2?'grid-column:span 2':''}`;
-  d.innerHTML = `<span style="font-size:3.5rem;transition:transform .35s">${a.e}</span><div style="text-align:center"><strong style="display:block;color:#1a2535;font-size:.95rem;margin-bottom:.2rem">${a.n}</strong><small style="color:#3d5166;font-size:.75rem">${a.sub}</small></div><div class="glb" style="position:static;transform:none;background:transparent;color:#2e86c8;font-size:.72rem;font-weight:700;padding:0;letter-spacing:.06em;text-transform:uppercase">Ver más →</div>`;
-  d.addEventListener('mouseenter',()=>{d.style.transform='translateY(-6px) scale(1.03)';d.style.borderColor='#2e86c8';d.style.background='rgba(45,134,200,.06)';d.style.boxShadow='0 12px 35px rgba(30,70,120,.15)';d.querySelector('span').style.transform='scale(1.2) rotate(-8deg)';});
-  d.addEventListener('mouseleave',()=>{d.style.transform='';d.style.borderColor='rgba(45,134,200,.15)';d.style.background='#fff';d.style.boxShadow='0 2px 14px rgba(30,70,120,.08)';d.querySelector('span').style.transform='';});
-  d.addEventListener('click',()=>openAnimalMo(a));
+  d.className = 'acard' + (a.span===2 ? ' span2' : '');
+  d.innerHTML = `
+    <span class="acard-emoji">${a.e}</span>
+    <div style="min-width:0;width:100%">
+      <span class="acard-name">${a.n}</span>
+      <span class="acard-sub">${a.sub}</span>
+    </div>
+    <span class="acard-cta">Ver más →</span>`;
+  d.addEventListener('click', () => openAnimalMo(a));
   ag.appendChild(d);
 });
 
