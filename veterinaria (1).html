@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VetCare — Clínica Veterinaria</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--g1:#2d6a4f;--g2:#40916c;--g3:#52b788;--teal:#1b4332;--gold:#f4a261;--gold2:#e76f51;--dark:#0d1b12;--dark2:#132219;--w:#fff;--sh:0 8px 40px rgba(0,0,0,.4)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--w);overflow-x:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--dark)}::-webkit-scrollbar-thumb{background:var(--g3);border-radius:3px}
+
+/* PROGRESS */
+#pb{position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,var(--g3),var(--gold));z-index:9999;transition:width .08s}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:1.3rem 3rem;transition:all .4s}
+nav.sc{background:rgba(10,20,14,.94);backdrop-filter:blur(20px);box-shadow:0 2px 30px rgba(0,0,0,.5);padding:.85rem 3rem}
+.nl{font-family:'Playfair Display',serif;font-size:1.65rem;font-weight:700;color:var(--w);text-decoration:none;display:flex;align-items:center;gap:.5rem}
+.nl:hover{color:var(--g3)}
+nav ul{display:flex;gap:2rem;list-style:none;align-items:center}
+nav ul a{text-decoration:none;font-size:.87rem;font-weight:500;color:rgba(255,255,255,.7);letter-spacing:.04em;position:relative;transition:color .3s}
+nav ul a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:2px;background:var(--g3);transform:scaleX(0);transition:transform .3s;transform-origin:right}
+nav ul a:hover{color:var(--w)}
+nav ul a:hover::after{transform:scaleX(1);transform-origin:left}
+.ncta{background:linear-gradient(135deg,var(--g2),var(--g3)) !important;color:var(--w) !important;padding:.5rem 1.4rem !important;border-radius:50px;font-weight:700 !important;box-shadow:0 4px 20px rgba(82,183,136,.3);transition:transform .25s,box-shadow .25s !important}
+.ncta::after{display:none !important}
+.ncta:hover{transform:translateY(-2px) !important;box-shadow:0 8px 30px rgba(82,183,136,.5) !important}
+.hbg{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none}
+.hbg span{display:block;width:24px;height:2px;background:white;border-radius:2px;transition:.3s}
+
+/* PEEK-A-BOO DOG */
+#peekdog{position:fixed;z-index:800;pointer-events:none;font-size:3.5rem;line-height:1;filter:drop-shadow(0 4px 18px rgba(0,0,0,.6))}
+#peekdog.from-left{animation:peekLeft 1.8s cubic-bezier(.22,1,.36,1) forwards}
+#peekdog.from-right{animation:peekRight 1.8s cubic-bezier(.22,1,.36,1) forwards}
+#peekdog.from-top{animation:peekTop 1.8s cubic-bezier(.22,1,.36,1) forwards}
+#peekdog.from-bottom{animation:peekBottom 1.8s cubic-bezier(.22,1,.36,1) forwards}
+@keyframes peekLeft{0%{transform:translateX(-130px);opacity:0}18%{transform:translateX(0);opacity:1}70%{transform:translateX(0);opacity:1}100%{transform:translateX(-130px);opacity:0}}
+@keyframes peekRight{0%{transform:translateX(130px);opacity:0}18%{transform:translateX(0);opacity:1}70%{transform:translateX(0);opacity:1}100%{transform:translateX(130px);opacity:0}}
+@keyframes peekTop{0%{transform:translateY(-130px);opacity:0}18%{transform:translateY(0);opacity:1}70%{transform:translateY(0);opacity:1}100%{transform:translateY(-130px);opacity:0}}
+@keyframes peekBottom{0%{transform:translateY(130px);opacity:0}18%{transform:translateY(0);opacity:1}70%{transform:translateY(0);opacity:1}100%{transform:translateY(130px);opacity:0}}
+#peekbub{position:absolute;background:white;color:#0d1b12;border-radius:14px;padding:.3rem .8rem;font-size:.7rem;font-weight:700;white-space:nowrap;box-shadow:0 4px 15px rgba(0,0,0,.3);bottom:110%;left:50%;transform:translateX(-50%)}
+
+/* CANVAS */
+#cvs{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.35}
+
+/* SECTIONS */
+section{min-height:100vh;position:relative;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.pbg{position:absolute;inset:-35% 0;height:170%;background-size:cover;background-position:center;will-change:transform;z-index:0}
+.pov{position:absolute;inset:0;z-index:1}
+.si{position:relative;z-index:2;padding:6rem 3rem}
+
+/* HERO */
+#hero{align-items:center;text-align:center}
+.hpbg{position:absolute;inset:-35% 0;height:170%;background:url('TU_FOTO_AQUI.jpg') center/cover no-repeat;will-change:transform;z-index:0}
+.hov{position:absolute;inset:0;z-index:1;background:linear-gradient(155deg,rgba(13,27,18,.87) 0%,rgba(19,34,25,.78) 55%,rgba(45,106,79,.65) 100%)}
+.hc{position:relative;z-index:2;padding:2rem;max-width:860px;margin:0 auto}
+.badge{display:inline-flex;align-items:center;gap:.6rem;border:1px solid rgba(82,183,136,.45);border-radius:50px;padding:.42rem 1.3rem;color:var(--g3);font-size:.77rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;margin-bottom:2rem;background:rgba(82,183,136,.07);backdrop-filter:blur(10px);animation:fdw .8s ease both}
+.htitle{font-family:'Playfair Display',serif;font-size:clamp(3rem,6.5vw,6.2rem);font-weight:700;line-height:1.05;color:var(--w);margin-bottom:1.5rem;animation:fup .9s .15s ease both}
+.htitle .acc{font-style:italic;background:linear-gradient(135deg,var(--g3),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hsub{font-size:clamp(1rem,2vw,1.2rem);color:rgba(255,255,255,.65);font-weight:300;line-height:1.8;margin-bottom:3rem;animation:fup .9s .3s ease both}
+.hbtns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;animation:fup .9s .45s ease both}
+
+.bglow{display:inline-flex;align-items:center;gap:.6rem;background:linear-gradient(135deg,var(--g2),var(--g3));color:white;padding:.95rem 2.4rem;border-radius:50px;text-decoration:none;font-weight:700;font-size:.95rem;animation:gp 2.5s ease-in-out infinite;transition:transform .25s,box-shadow .25s}
+.bglow:hover{transform:translateY(-4px) scale(1.03);animation:none;box-shadow:0 14px 40px rgba(82,183,136,.5)}
+@keyframes gp{0%,100%{box-shadow:0 0 0 0 rgba(82,183,136,.5)}50%{box-shadow:0 0 0 14px rgba(82,183,136,0)}}
+.bout{display:inline-flex;align-items:center;gap:.6rem;border:1.5px solid rgba(255,255,255,.3);color:white;padding:.95rem 2.4rem;border-radius:50px;text-decoration:none;font-weight:500;font-size:.95rem;backdrop-filter:blur(8px);background:rgba(255,255,255,.06);transition:all .25s}
+.bout:hover{border-color:var(--g3);background:rgba(82,183,136,.14);transform:translateY(-4px)}
+
+/* STATS BAR */
+.sbar{position:absolute;bottom:0;left:0;right:0;z-index:2;display:flex;justify-content:center;background:rgba(10,20,14,.75);backdrop-filter:blur(18px);border-top:1px solid rgba(82,183,136,.18)}
+.si2{padding:1.3rem 3rem;text-align:center;border-right:1px solid rgba(82,183,136,.13);transition:background .3s;cursor:default}
+.si2:last-child{border-right:none}
+.si2:hover{background:rgba(82,183,136,.09)}
+.sn{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--g3);display:block}
+.sl{font-size:.75rem;color:rgba(255,255,255,.45);letter-spacing:.07em;text-transform:uppercase}
+
+/* SCROLL WHEEL */
+.sw{position:absolute;bottom:5.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.55rem;z-index:2;color:rgba(255,255,255,.3);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase}
+.swb{width:22px;height:38px;border:1.5px solid rgba(255,255,255,.2);border-radius:11px;display:flex;justify-content:center;padding-top:5px}
+.swd{width:3px;height:7px;background:var(--g3);border-radius:2px;animation:sd 1.8s ease-in-out infinite}
+@keyframes sd{0%,100%{transform:translateY(0);opacity:1}80%{transform:translateY(11px);opacity:0}}
+
+/* SHARED HEADER */
+.slb{display:inline-block;font-size:.74rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--g3);margin-bottom:.8rem}
+.st{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:700;line-height:1.15;margin-bottom:1rem}
+.ss{font-size:.98rem;font-weight:300;line-height:1.8;color:rgba(255,255,255,.55);max-width:520px}
+
+/* ── SERVICIOS ── */
+#servicios{background:var(--dark2)}
+#servicios .pbg{background-image:url('https://images.unsplash.com/photo-1548681528-6a5c45b66b42?w=1600&q=80');opacity:.07}
+#servicios .pov{background:linear-gradient(135deg,rgba(13,27,18,.97),rgba(19,34,25,.94))}
+.sg{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1.2rem;margin-top:3rem}
+.svc{background:rgba(255,255,255,.04);border:1px solid rgba(82,183,136,.13);border-radius:20px;padding:2rem 1.6rem;position:relative;overflow:hidden;cursor:default;opacity:0;transform:translateY(40px) scale(.95);transition:all .4s cubic-bezier(.175,.885,.32,1.275)}
+.svc::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(82,183,136,.1),transparent);opacity:0;transition:opacity .4s}
+.svc.an{opacity:1;transform:none}
+.svc:hover{transform:translateY(-10px) scale(1.02);border-color:var(--g3);box-shadow:0 20px 50px rgba(82,183,136,.2);background:rgba(82,183,136,.07)}
+.svc:hover::before{opacity:1}
+.sic{font-size:2.5rem;display:block;margin-bottom:1.2rem;transition:transform .4s cubic-bezier(.175,.885,.32,1.275)}
+.svc:hover .sic{transform:scale(1.2) rotate(-8deg)}
+.svc h3{font-size:1rem;font-weight:600;color:var(--w);margin-bottom:.5rem}
+.svc p{font-size:.84rem;color:rgba(255,255,255,.48);line-height:1.6}
+.stag{display:inline-block;margin-top:1rem;font-size:.71rem;font-weight:700;color:var(--g3);letter-spacing:.08em;text-transform:uppercase}
+
+/* ── TIENDA ── */
+#tienda{background:var(--dark)}
+#tienda .pbg{background-image:url('https://images.unsplash.com/photo-1601758174493-e5ac7e761754?w=1600&q=80');opacity:.09}
+#tienda .pov{background:linear-gradient(160deg,rgba(10,20,14,.97),rgba(13,27,18,.95))}
+.pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.2rem;margin-top:3rem}
+.pc{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;cursor:pointer;transition:all .35s;opacity:0;transform:translateY(30px)}
+.pc.an{opacity:1;transform:none}
+.pc:hover{transform:translateY(-8px) scale(1.02);border-color:var(--gold);box-shadow:0 20px 50px rgba(244,162,97,.15)}
+.pci{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:4.5rem;background:rgba(255,255,255,.04);transition:background .35s}
+.pc:hover .pci{background:rgba(82,183,136,.07)}
+.pci span{transition:transform .35s}
+.pc:hover .pci span{transform:scale(1.15) rotate(8deg);display:block}
+.pin{padding:1.1rem}
+.pin h3{color:var(--w);font-size:.91rem;font-weight:600;margin-bottom:.3rem}
+.pin p{color:rgba(255,255,255,.38);font-size:.78rem;margin-bottom:.7rem}
+.pb2{display:flex;align-items:center;justify-content:space-between}
+.pp{font-family:'Playfair Display',serif;color:var(--gold);font-size:1.1rem;font-weight:700}
+.pvb{background:rgba(82,183,136,.14);border:1px solid rgba(82,183,136,.28);color:var(--g3);border-radius:50px;padding:.32rem .85rem;font-size:.74rem;font-weight:700;cursor:pointer;transition:all .25s;font-family:'DM Sans',sans-serif}
+.pvb:hover{background:var(--g2);color:white;border-color:var(--g2)}
+
+/* ── GALERÍA ── */
+#galeria{background:var(--dark2)}
+#galeria .pbg{background-image:url('https://images.unsplash.com/photo-1552053831-71594a27632d?w=1600&q=80');opacity:.06}
+#galeria .pov{background:linear-gradient(180deg,rgba(13,27,18,.98),rgba(19,34,25,.95))}
+.gg{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,195px);gap:.8rem;margin-top:3rem}
+.gi{border-radius:16px;overflow:hidden;cursor:pointer;position:relative;background:rgba(255,255,255,.05);transition:transform .35s,box-shadow .35s;opacity:0}
+.gi.an{animation:gin .6s ease forwards}
+@keyframes gin{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
+.gi:nth-child(1){grid-column:span 2}
+.gi:nth-child(4){grid-column:span 2}
+.gi:hover{transform:scale(1.05);z-index:5;box-shadow:0 20px 50px rgba(0,0,0,.55)}
+.gi img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.gi:hover img{transform:scale(1.1)}
+.glb{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(13,27,18,.92),transparent);color:white;padding:.8rem;font-size:.8rem;font-weight:500;transform:translateY(100%);transition:transform .35s}
+.gi:hover .glb{transform:translateY(0)}
+
+/* ── TESTIMONIOS ── */
+#testimonios{background:var(--teal)}
+#testimonios .pbg{background-image:url('https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=1600&q=80');opacity:.13}
+#testimonios .pov{background:linear-gradient(135deg,rgba(27,67,50,.95),rgba(45,106,79,.9))}
+.tw{max-width:800px;margin:3rem auto 0;position:relative}
+.test{display:none;background:rgba(255,255,255,.08);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.14);border-radius:24px;padding:3rem}
+.test.ac{display:block;animation:fi .5s ease}
+.ts{font-size:1.2rem;margin-bottom:1.5rem;letter-spacing:.07em}
+.tt{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(1.1rem,2vw,1.4rem);line-height:1.7;color:var(--w);margin-bottom:2rem}
+.ta{display:flex;align-items:center;gap:1rem}
+.tav{width:52px;height:52px;border-radius:50%;background:rgba(82,183,136,.2);border:2px solid rgba(82,183,136,.35);display:flex;align-items:center;justify-content:center;font-size:1.5rem}
+.tn{color:var(--w);font-weight:600}
+.tp{color:rgba(255,255,255,.45);font-size:.82rem}
+.cdots{display:flex;justify-content:center;gap:.5rem;margin-top:2rem}
+.cd{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.22);cursor:pointer;border:none;transition:all .3s}
+.cd.ac{background:var(--g3);transform:scale(1.4)}
+
+/* ── NOSOTROS ── */
+#nosotros{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;overflow:hidden}
+.nis{position:relative;overflow:hidden;background:#0d1b12}
+.npbg{position:absolute;inset:-35% 0;height:170%;background:url('https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?w=800&q=80') center/cover no-repeat;opacity:.35;will-change:transform}
+.nov{position:absolute;inset:0;background:linear-gradient(135deg,rgba(13,27,18,.65),rgba(27,67,50,.45));z-index:1}
+.ndeco{position:absolute;bottom:2.5rem;left:2rem;z-index:2;background:linear-gradient(135deg,var(--g2),var(--g3));border-radius:20px;padding:1.2rem 1.8rem;box-shadow:0 8px 30px rgba(64,145,108,.4)}
+.ndeco strong{display:block;font-size:2.2rem;font-family:'Playfair Display',serif;color:white}
+.ndeco span{font-size:.8rem;color:rgba(255,255,255,.8)}
+.nc{padding:5rem 4rem;display:flex;flex-direction:column;justify-content:center;background:var(--dark)}
+.nc .ss{max-width:100%;margin-bottom:1rem}
+.vals{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:1.5rem 0}
+.vl{background:rgba(82,183,136,.07);border:1px solid rgba(82,183,136,.14);border-radius:14px;padding:1rem 1.2rem;display:flex;align-items:center;gap:.8rem;transition:all .3s;cursor:default}
+.vl:hover{background:rgba(82,183,136,.14);border-color:var(--g3);transform:translateX(5px)}
+.vl span{font-size:1.4rem}
+.vl strong{font-size:.85rem;color:rgba(255,255,255,.85)}
+
+/* ── CONTACTO ── */
+#contacto{background:var(--dark2)}
+#contacto .pbg{background-image:url('https://images.unsplash.com/photo-1574144611937-0df059b5ef3e?w=1600&q=80');opacity:.06}
+#contacto .pov{background:linear-gradient(180deg,rgba(13,27,18,.98),rgba(19,34,25,.96))}
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;margin-top:3rem}
+.fb{background:rgba(255,255,255,.04);border:1px solid rgba(82,183,136,.14);border-radius:24px;padding:2.5rem}
+.fb h3{font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:1.8rem}
+.fg2{margin-bottom:1.1rem}
+.fg2 label{display:block;font-size:.77rem;font-weight:600;color:rgba(255,255,255,.45);margin-bottom:.5rem;letter-spacing:.06em;text-transform:uppercase}
+.fg2 input,.fg2 textarea,.fg2 select{width:100%;padding:.88rem 1.1rem;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.09);border-radius:12px;color:white;font-family:'DM Sans',sans-serif;font-size:.94rem;outline:none;transition:border-color .3s,box-shadow .3s,background .3s}
+.fg2 input:focus,.fg2 textarea:focus,.fg2 select:focus{border-color:var(--g3);box-shadow:0 0 0 4px rgba(82,183,136,.11);background:rgba(82,183,136,.05)}
+.fg2 select option{background:var(--dark)}
+.fg2 textarea{resize:none;height:110px}
+.bsub{width:100%;background:linear-gradient(135deg,var(--g2),var(--g3));color:white;border:none;border-radius:50px;padding:1rem;font-size:1rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:transform .25s,box-shadow .25s}
+.bsub:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(82,183,136,.4)}
+.cis{display:flex;flex-direction:column;gap:1.2rem}
+.cih h3{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:.5rem}
+.cih p{color:rgba(255,255,255,.45);font-size:.95rem;line-height:1.7}
+.ibl{display:flex;align-items:flex-start;gap:1rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:1.2rem;transition:all .3s;cursor:default}
+.ibl:hover{border-color:rgba(82,183,136,.28);background:rgba(82,183,136,.05);transform:translateX(4px)}
+.iic{width:44px;height:44px;background:rgba(82,183,136,.14);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.itx strong{display:block;color:white;font-size:.9rem;margin-bottom:.2rem}
+.itx span{color:rgba(255,255,255,.42);font-size:.83rem}
+.mp{background:linear-gradient(135deg,rgba(82,183,136,.09),rgba(64,145,108,.04));border:1px solid rgba(82,183,136,.14);border-radius:16px;height:155px;display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative}
+.mpl{position:absolute;bottom:.8rem;left:50%;transform:translateX(-50%);background:rgba(82,183,136,.18);border:1px solid rgba(82,183,136,.28);border-radius:50px;padding:.3rem 1rem;color:var(--g3);font-size:.78rem;font-weight:700;white-space:nowrap}
+.bwa{display:flex;align-items:center;justify-content:center;gap:.75rem;background:#25d366;color:white;border-radius:50px;padding:1rem 2rem;text-decoration:none;font-weight:700;font-size:1rem;box-shadow:0 4px 25px rgba(37,211,102,.35);transition:all .3s}
+.bwa:hover{background:#1db954;transform:translateY(-3px);box-shadow:0 10px 35px rgba(37,211,102,.5)}
+
+/* FOOTER */
+footer{background:rgba(0,0,0,.45);border-top:1px solid rgba(82,183,136,.09);text-align:center;padding:2rem;color:rgba(255,255,255,.3);font-size:.85rem}
+footer span{color:var(--g3)}
+
+/* WA FLOAT */
+.waf{position:fixed;bottom:2rem;right:2rem;z-index:900;width:62px;height:62px;background:#25d366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 25px rgba(37,211,102,.5);text-decoration:none;transition:transform .3s,box-shadow .3s;animation:wp 2.5s infinite}
+.waf:hover{transform:scale(1.12);box-shadow:0 8px 35px rgba(37,211,102,.7);animation:none}
+@keyframes wp{0%,100%{box-shadow:0 4px 25px rgba(37,211,102,.5)}50%{box-shadow:0 4px 40px rgba(37,211,102,.8),0 0 0 12px rgba(37,211,102,.07)}}
+
+/* MODAL */
+.mo{position:fixed;inset:0;z-index:5000;background:rgba(0,0,0,.82);backdrop-filter:blur(14px);display:none;align-items:center;justify-content:center;padding:1rem}
+.mo.ac{display:flex;animation:fi .3s ease}
+.mb{background:#132219;border:1px solid rgba(82,183,136,.2);border-radius:24px;max-width:470px;width:100%;overflow:hidden;animation:sci .35s cubic-bezier(.175,.885,.32,1.275);box-shadow:0 30px 80px rgba(0,0,0,.65)}
+.mi{width:100%;aspect-ratio:16/9;background:rgba(82,183,136,.07);display:flex;align-items:center;justify-content:center;font-size:6rem;border-bottom:1px solid rgba(82,183,136,.1)}
+.mbd{padding:2rem}
+.mbd h2{font-family:'Playfair Display',serif;font-size:1.4rem;color:white;margin-bottom:.4rem}
+.mpr{font-size:1.8rem;color:var(--gold);font-family:'Playfair Display',serif;font-weight:700;margin:.4rem 0 1rem}
+.mbd p{color:rgba(255,255,255,.52);font-size:.89rem;line-height:1.7;margin-bottom:1.5rem}
+.mac{display:flex;gap:.8rem}
+.mwa{flex:1;background:#25d366;color:white;border:none;border-radius:50px;padding:.85rem;font-size:.9rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;font-family:'DM Sans',sans-serif;transition:background .3s,transform .2s}
+.mwa:hover{background:#1db954;transform:translateY(-2px)}
+.mcl{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:50px;padding:.85rem 1.5rem;color:rgba(255,255,255,.55);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.9rem;transition:background .3s}
+.mcl:hover{background:rgba(255,255,255,.12)}
+
+/* ANIMATIONS */
+@keyframes fup{from{opacity:0;transform:translateY(35px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fdw{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+@keyframes sci{from{opacity:0;transform:scale(.84)}to{opacity:1;transform:scale(1)}}
+
+/* RESPONSIVE */
+@media(max-width:960px){
+  nav{padding:1rem 1.5rem}nav.sc{padding:.7rem 1.5rem}
+  nav ul{display:none;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:rgba(10,20,14,.97);backdrop-filter:blur(20px);padding:1.5rem;gap:1rem;border-top:1px solid rgba(82,183,136,.12)}
+  nav ul.op{display:flex}
+  .hbg{display:flex}
+  #nosotros{grid-template-columns:1fr}
+  .nis{min-height:320px}
+  .nc{padding:3rem 2rem}
+  .cg{grid-template-columns:1fr;gap:2rem}
+  .gg{grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(4,155px)}
+  .gi:nth-child(1),.gi:nth-child(4){grid-column:span 1}
+  .sbar{flex-wrap:wrap}
+  .si2{padding:1rem 2rem;border-right:none;border-bottom:1px solid rgba(82,183,136,.12)}
+}
+@media(max-width:600px){
+  .si{padding:4rem 1.5rem}
+  .vals{grid-template-columns:1fr}
+  .test{padding:2rem 1.5rem}
+}
+</style>
+</head>
+<body>
+
+<div id="pb"></div>
+<canvas id="cvs"></canvas>
+
+<!-- PEEK-A-BOO DOG -->
+<div id="peekdog" style="display:none">🐕<div id="peekbub"></div></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#hero" class="nl">🐾 VetCare</a>
+  <ul id="nl2">
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#tienda">Tienda</a></li>
+    <li><a href="#galeria">Galería</a></li>
+    <li><a href="#testimonios">Testimonios</a></li>
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#contacto" class="ncta">Contactar</a></li>
+  </ul>
+  <button class="hbg" id="hbg"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hpbg" data-parallax="0.5"></div>
+  <div class="hov"></div>
+  <div class="hc">
+    <div class="badge">🏥 Clínica Veterinaria Premium · CDMX</div>
+    <h1 class="htitle">El cuidado que tu<br><span class="acc">mascota merece</span></h1>
+    <p class="hsub">Atención profesional, cálida y especializada para cada<br>integrante peludo de tu familia.</p>
+    <div class="hbtns">
+      <a href="#contacto" class="bglow">📅 Agendar cita</a>
+      <a href="#tienda" class="bout">🛍️ Ver productos</a>
+    </div>
+  </div>
+  <div class="sw"><div class="swb"><div class="swd"></div></div>Scroll</div>
+  <div class="sbar">
+    <div class="si2"><span class="sn" data-target="3500">0</span><span class="sl">Mascotas atendidas</span></div>
+    <div class="si2"><span class="sn" data-target="15">0</span><span class="sl">Años de experiencia</span></div>
+    <div class="si2"><span class="sn" data-target="98">0</span><span class="sl">% Satisfacción</span></div>
+    <div class="si2"><span class="sn">24h</span><span class="sl">Urgencias</span></div>
+  </div>
+</section>
+
+<!-- SERVICIOS -->
+<section id="servicios">
+  <div class="pbg" data-parallax="0.35"></div>
+  <div class="pov"></div>
+  <div class="si">
+    <span class="slb">¿Qué ofrecemos?</span>
+    <h2 class="st">Nuestros <span style="color:var(--g3)">servicios</span></h2>
+    <p class="ss">Un equipo multidisciplinario para cubrir cada necesidad de tu compañero.</p>
+    <div class="sg">
+      <div class="svc"><span class="sic">🩺</span><h3>Consulta General</h3><p>Revisión completa y diagnóstico personalizado con médicos especializados.</p><span class="stag">→ Agendar</span></div>
+      <div class="svc"><span class="sic">💉</span><h3>Vacunación</h3><p>Esquemas preventivos completos para perros, gatos y animales exóticos.</p><span class="stag">→ Agendar</span></div>
+      <div class="svc"><span class="sic">🐛</span><h3>Desparasitación</h3><p>Control interno y externo con los tratamientos más efectivos y seguros.</p><span class="stag">→ Agendar</span></div>
+      <div class="svc"><span class="sic">🔬</span><h3>Cirugías</h3><p>Quirófano equipado y cirujanos certificados para cada procedimiento.</p><span class="stag">→ Agendar</span></div>
+      <div class="svc"><span class="sic">✂️</span><h3>Estética Canina</h3><p>Baño, corte, uñas y más para que tu mascota luzca espectacular.</p><span class="stag">→ Agendar</span></div>
+      <div class="svc"><span class="sic">🚨</span><h3>Urgencias 24h</h3><p>Atención de emergencias las 24 horas, los 7 días de la semana.</p><span class="stag">→ Llamar</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- TIENDA -->
+<section id="tienda">
+  <div class="pbg" data-parallax="0.4"></div>
+  <div class="pov"></div>
+  <div class="si">
+    <span class="slb">Nuestra tienda</span>
+    <h2 class="st">Productos <span style="color:var(--gold)">premium</span></h2>
+    <p class="ss">Seleccionamos lo mejor del mercado para la salud y felicidad de tu mascota.</p>
+    <div class="pg" id="pg"></div>
+  </div>
+</section>
+
+<!-- ANIMALES -->
+<section id="galeria">
+  <div class="pbg" data-parallax="0.3"></div>
+  <div class="pov"></div>
+  <div class="si">
+    <span class="slb">A quienes atendemos</span>
+    <h2 class="st">Animales que <span style="color:var(--g3)">cuidamos</span></h2>
+    <p class="ss">Atendemos una gran variedad de animales con el mismo amor y profesionalismo.</p>
+    <div class="gg" id="animalesGrid"></div>
+  </div>
+</section>
+
+<!-- ANIMAL MODAL -->
+<div class="mo" id="animalMo">
+  <div class="mb" style="max-width:420px">
+    <div class="mi" id="animalMi" style="font-size:7rem"></div>
+    <div class="mbd">
+      <h2 id="animalNombre"></h2>
+      <div class="mpr" id="animalSub" style="font-size:1rem;color:var(--g3)"></div>
+      <p id="animalDesc"></p>
+      <div class="mac">
+        <a href="#contacto" class="mwa" onclick="closeAnimalMo()" style="text-decoration:none">📅 Agendar consulta</a>
+        <button class="mcl" onclick="closeAnimalMo()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIOS -->
+<section id="testimonios">
+  <div class="pbg" data-parallax="0.4"></div>
+  <div class="pov"></div>
+  <div class="si" style="text-align:center">
+    <span class="slb">Lo que dicen</span>
+    <h2 class="st">Familias <span style="color:var(--g3)">felices</span></h2>
+    <div class="tw">
+      <div class="test ac"><div class="ts">⭐⭐⭐⭐⭐</div><p class="tt">"Llevé a mi perro Simón de emergencia y la atención fue increíble. El Dr. García lo trató como si fuera suyo."</p><div class="ta"><div class="tav">👩</div><div><div class="tn">Mariana López</div><div class="tp">Dueña de Simón 🐕</div></div></div></div>
+      <div class="test"><div class="ts">⭐⭐⭐⭐⭐</div><p class="tt">"La estética es excelente, mi gata Perla siempre sale preciosa. El trato es muy profesional y cariñoso."</p><div class="ta"><div class="tav">👨</div><div><div class="tn">Carlos Mendoza</div><div class="tp">Papá de Perla 🐱</div></div></div></div>
+      <div class="test"><div class="ts">⭐⭐⭐⭐⭐</div><p class="tt">"Voy con toda mi familia animal: dos perros y un gato. Siempre encuentro excelente atención y precios accesibles."</p><div class="ta"><div class="tav">👩‍🦱</div><div><div class="tn">Sofía Ramírez</div><div class="tp">Dueña de 3 mascotas 🐾</div></div></div></div>
+      <div class="test"><div class="ts">⭐⭐⭐⭐⭐</div><p class="tt">"Las vacunas siempre al corriente, el equipo es muy organizado. Me recuerdan las citas y explican todo con paciencia."</p><div class="ta"><div class="tav">🧑</div><div><div class="tn">Roberto Fuentes</div><div class="tp">Papá de Kira 🐶</div></div></div></div>
+      <div class="cdots" id="cdots"></div>
+    </div>
+  </div>
+</section>
+
+<!-- NOSOTROS -->
+<section id="nosotros">
+  <div class="nis">
+    <div class="npbg" data-parallax="0.35"></div>
+    <div class="nov"></div>
+    <div class="ndeco"><strong>+15</strong><span>años de experiencia</span></div>
+  </div>
+  <div class="nc">
+    <span class="slb">Sobre nosotros</span>
+    <h2 class="st" style="margin-bottom:1.5rem">Medicina con <span style="color:var(--g3)">alma</span></h2>
+    <p class="ss">Somos una clínica fundada con una convicción: cada mascota merece atención de primer nivel con el calor humano que une familias.</p>
+    <p class="ss" style="margin-top:.8rem">El Dr. Jorge García, con +15 años de experiencia, lidera un equipo apasionado. Especialistas en medicina interna, cirugía y medicina preventiva.</p>
+    <div class="vals">
+      <div class="vl"><span>❤️</span><strong>Amor por los animales</strong></div>
+      <div class="vl"><span>🎓</span><strong>Equipo certificado</strong></div>
+      <div class="vl"><span>🏥</span><strong>Instalaciones modernas</strong></div>
+      <div class="vl"><span>🤝</span><strong>Trato transparente</strong></div>
+    </div>
+    <a href="#contacto" class="bglow" style="width:fit-content;text-decoration:none">📅 Agendar cita</a>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="pbg" data-parallax="0.3"></div>
+  <div class="pov"></div>
+  <div class="si">
+    <span class="slb">¿Cómo contactarnos?</span>
+    <h2 class="st">Estamos aquí <span style="color:var(--g3)">para ti</span></h2>
+    <p class="ss">Escríbenos, llámanos o visítanos. Tu mascota no puede esperar.</p>
+    <div class="cg">
+      <div class="fb">
+        <h3>Envíanos un mensaje</h3>
+        <div class="fg2"><label>Nombre completo</label><input type="text" placeholder="Ej: María García"></div>
+        <div class="fg2"><label>Teléfono</label><input type="tel" placeholder="55 1234 5678"></div>
+        <div class="fg2"><label>Mascota</label><select><option>🐕 Perro</option><option>🐱 Gato</option><option>🐾 Otro</option></select></div>
+        <div class="fg2"><label>Mensaje</label><textarea placeholder="Cuéntanos cómo podemos ayudar..."></textarea></div>
+        <button class="bsub" onclick="this.textContent='✅ ¡Enviado!';setTimeout(()=>this.textContent='Enviar mensaje →',2500)">Enviar mensaje →</button>
+      </div>
+      <div class="cis">
+        <div class="cih"><h3>Visítanos pronto</h3><p>Nuestras puertas siempre están abiertas para ti y tu compañero.</p></div>
+        <div class="ibl"><div class="iic">📍</div><div class="itx"><strong>Dirección</strong><span>Av. Mascotas #123, Col. Jardines, CDMX</span></div></div>
+        <div class="ibl"><div class="iic">⏰</div><div class="itx"><strong>Horario</strong><span>Lun–Vie 8am–8pm · Sáb 9am–6pm · Dom urgencias</span></div></div>
+        <div class="ibl"><div class="iic">📞</div><div class="itx"><strong>Teléfono</strong><span>55 1234 5678</span></div></div>
+        <div class="mp">🗺️<div class="mpl">📍 Av. Mascotas #123, CDMX</div></div>
+        <a href="https://wa.me/5512345678?text=Hola,%20quiero%20agendar%20una%20cita" target="_blank" class="bwa">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Escríbenos por WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer><p>© 2025 <span>VetCare</span> Clínica Veterinaria · Hecho con ❤️ para las mascotas de México 🐾</p></footer>
+
+<a href="https://wa.me/5512345678" target="_blank" class="waf">
+  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- MODAL -->
+<div class="mo" id="mo">
+  <div class="mb">
+    <div class="mi" id="mi"></div>
+    <div class="mbd">
+      <h2 id="mn"></h2><div class="mpr" id="mpr"></div><p id="md"></p>
+      <div class="mac">
+        <button class="mwa" id="mwa">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Pedir por WhatsApp
+        </button>
+        <button class="mcl" onclick="closeMo()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── PRODUCTOS ── */
+const prods=[
+  {e:'🦴',n:'Croquetas Premium Adulto',p:'$349 MXN',d:'Fórmula balanceada con proteína de pollo real, sin colorantes. Ideal para perros adultos de todas las razas.'},
+  {e:'🐟',n:'Alimento Gato Salmón',p:'$289 MXN',d:'Alimento húmedo con salmón real y vegetales. Alto en omega-3 para piel y pelaje radiante.'},
+  {e:'🎾',n:'Set Juguetes Interactivos',p:'$199 MXN',d:'Kit de 4 juguetes de distintas texturas. Estimula la mente y el instinto de caza de tu mascota.'},
+  {e:'🧴',n:'Shampoo Hipoalergénico',p:'$159 MXN',d:'Fórmula suave con aloe vera y lavanda. Sin sulfatos ni parabenos. Para piel sensible.'},
+  {e:'🦟',n:'Collar Antipulgas 8 meses',p:'$249 MXN',d:'Protección 8 meses contra pulgas, garrapatas y mosquitos. Resistente al agua.'},
+  {e:'💊',n:'Vitaminas Multivitamínico',p:'$379 MXN',d:'Masticables sabor pollo. Fortalece huesos, sistema inmune y energía. 60 tabletas.'},
+  {e:'🛁',n:'Bañera Plegable',p:'$449 MXN',d:'Portátil con drenaje y base antideslizante. Compatible con perros pequeños y medianos.'},
+  {e:'🏠',n:'Casa con Cojín Lavable',p:'$599 MXN',d:'Refugio suave y cálido con cojín desmontable lavable. Diseño moderno para tu hogar.'},
+  {e:'🪮',n:'Cepillo Deslanador Pro',p:'$189 MXN',d:'Acero inoxidable que reduce pelo suelto hasta 90%. Seguro y cómodo para cualquier raza.'},
+  {e:'🎀',n:'Kit Accesorios Glamour',p:'$129 MXN',d:'Lazo, collar ajustable y plaquita personalizable. Para lucir increíble en cada paseo.'},
+];
+const pg=document.getElementById('pg');
+prods.forEach((p,i)=>{
+  const c=document.createElement('div');c.className='pc';
+  c.innerHTML=`<div class="pci"><span>${p.e}</span></div><div class="pin"><h3>${p.n}</h3><p>${p.d.slice(0,52)}…</p><div class="pb2"><span class="pp">${p.p}</span><button class="pvb" onclick="event.stopPropagation();openM(${i})">Ver más</button></div></div>`;
+  c.onclick=()=>openM(i);pg.appendChild(c);
+});
+
+function openM(i){
+  const p=prods[i];
+  document.getElementById('mi').textContent=p.e;
+  document.getElementById('mn').textContent=p.n;
+  document.getElementById('mpr').textContent=p.p;
+  document.getElementById('md').textContent=p.d;
+  document.getElementById('mwa').onclick=()=>window.open(`https://wa.me/5512345678?text=Hola,%20quiero:%20${encodeURIComponent(p.n)}%20(${encodeURIComponent(p.p)})`,'_blank');
+  document.getElementById('mo').classList.add('ac');
+  document.body.style.overflow='hidden';
+}
+function closeMo(){document.getElementById('mo').classList.remove('ac');document.body.style.overflow='';}
+document.getElementById('mo').addEventListener('click',e=>{if(e.target===e.currentTarget)closeMo();});
+
+/* ── ANIMALES QUE ATENDEMOS ── */
+const animales = [
+  {e:'🐕',n:'Perros',sub:'Caninos de todas las razas',d:'Atendemos perros de todas las razas y tamaños. Desde cachorros hasta adultos mayores, ofrecemos consultas, vacunas, cirugías y estética canina con el mayor cuidado.',span:2},
+  {e:'🐱',n:'Gatos',sub:'Felinos domésticos y exóticos',d:'Nuestro equipo está especializado en medicina felina. Atendemos gatos domésticos, siameses, persas y razas exóticas con técnicas de manejo libre de estrés.'},
+  {e:'🦜',n:'Aves',sub:'Psitácidos y aves de ornato',d:'Loros, pericos, canarios, palomas y más. Contamos con médicos con experiencia en ornitología para consultas, recorte de uñas y pico, y atención de enfermedades respiratorias.'},
+  {e:'🐇',n:'Conejos',sub:'Lagomorfos y pequeños roedores',d:'Atendemos conejos, hamsters, cobayas y chinchillas. Realizamos revisiones dentales, esterilizaciones y control de enfermedades comunes en pequeños mamíferos.'},
+  {e:'🐎',n:'Caballos',sub:'Equinos y grandes animales',d:'Servicio a domicilio para equinos. Atendemos caballos, ponies y burros. Ofrecemos desparasitación, odontología equina, herraje y cirugías de campo.',span:2},
+  {e:'🦎',n:'Reptiles',sub:'Tortugas, iguanas y serpientes',d:'Especialistas en medicina de reptiles. Atendemos tortugas, iguanas, camaleones, geccos y serpientes. Control de temperatura, nutrición y enfermedades dermatológicas.'},
+  {e:'🐠',n:'Peces',sub:'Medicina acuática',d:'Diagnóstico y tratamiento de enfermedades en peces ornamentales y koi. Análisis de agua, control de parásitos y hongos, y asesoría en el mantenimiento de acuarios.'},
+  {e:'🐹',n:'Roedores',sub:'Ratas, ratones y jerbos',d:'Atención especializada para roedores de compañía. Revisión general, odontología, esterilización y manejo de tumores, tan comunes en estas especies.'},
+];
+
+const ag = document.getElementById('animalesGrid');
+// Rebuild the grid with 4-col layout supporting span-2
+ag.style.cssText = 'display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin-top:3rem';
+
+animales.forEach((a,i) => {
+  const d = document.createElement('div');
+  d.className = 'gi';
+  d.style.cssText = `cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;padding:1.5rem;min-height:160px;background:rgba(255,255,255,.05);border:1px solid rgba(82,183,136,.15);border-radius:16px;transition:all .35s;${a.span===2?'grid-column:span 2':''}`;
+  d.innerHTML = `<span style="font-size:3.5rem;transition:transform .35s">${a.e}</span><div style="text-align:center"><strong style="display:block;color:white;font-size:.95rem;margin-bottom:.2rem">${a.n}</strong><small style="color:rgba(255,255,255,.45);font-size:.75rem">${a.sub}</small></div><div class="glb" style="position:static;transform:none;background:transparent;color:var(--g3);font-size:.72rem;font-weight:700;padding:0;letter-spacing:.06em;text-transform:uppercase">Ver más →</div>`;
+  d.addEventListener('mouseenter',()=>{d.style.transform='translateY(-6px) scale(1.03)';d.style.borderColor='var(--g3)';d.style.background='rgba(82,183,136,.1)';d.querySelector('span').style.transform='scale(1.2) rotate(-8deg)';});
+  d.addEventListener('mouseleave',()=>{d.style.transform='';d.style.borderColor='rgba(82,183,136,.15)';d.style.background='rgba(255,255,255,.05)';d.querySelector('span').style.transform='';});
+  d.addEventListener('click',()=>openAnimalMo(a));
+  ag.appendChild(d);
+});
+
+function openAnimalMo(a){
+  document.getElementById('animalMi').textContent=a.e;
+  document.getElementById('animalNombre').textContent=a.n;
+  document.getElementById('animalSub').textContent=a.sub;
+  document.getElementById('animalDesc').textContent=a.d;
+  document.getElementById('animalMo').classList.add('ac');
+  document.body.style.overflow='hidden';
+}
+function closeAnimalMo(){document.getElementById('animalMo').classList.remove('ac');document.body.style.overflow='';}
+document.getElementById('animalMo').addEventListener('click',e=>{if(e.target===e.currentTarget)closeAnimalMo();});
+
+/* ── SERVICIOS CARDS → SCROLL TO CONTACTO ── */
+document.querySelectorAll('.svc').forEach(c=>{
+  c.style.cursor='pointer';
+  c.addEventListener('click',()=>{
+    document.getElementById('contacto').scrollIntoView({behavior:'smooth'});
+  });
+});
+
+/* ── PEEK-A-BOO DOG ── */
+const peekDog = document.getElementById('peekdog');
+const peekBub = document.getElementById('peekbub');
+const peekMsgs = ['¡Woof! 🐾','¡Hola!','¡Visítanos!','¡Arf arf!','¡Cuida a tu pet!'];
+let peekCount = 0;
+
+function doPeek(){
+  const vw = window.innerWidth, vh = window.innerHeight;
+  const sides = ['from-left','from-right','from-top','from-bottom'];
+  const side = sides[Math.floor(Math.random()*sides.length)];
+  const emojis = ['🐕','🐶','🐩','🦮'];
+  const em = emojis[peekCount % emojis.length];
+
+  // Position on chosen edge
+  let left, top;
+  if(side==='from-left')  { left=0;         top=Math.random()*(vh-120)+60; }
+  if(side==='from-right') { left=vw-70;     top=Math.random()*(vh-120)+60; }
+  if(side==='from-top')   { left=Math.random()*(vw-120)+60; top=0; }
+  if(side==='from-bottom'){ left=Math.random()*(vw-120)+60; top=vh-70; }
+
+  peekBub.textContent = peekMsgs[peekCount % peekMsgs.length];
+  peekDog.style.cssText = `display:block;left:${left}px;top:${top}px`;
+  peekDog.firstChild.textContent = em;
+  peekDog.className = side;
+  peekCount++;
+
+  // Hide after animation ends (1.8s)
+  setTimeout(()=>{ peekDog.style.display='none'; peekDog.className=''; }, 1900);
+}
+
+// First peek after 8s, then every 60s
+setTimeout(()=>{ doPeek(); setInterval(doPeek, 60000); }, 8000);
+
+/* ── PARALLAX rAF ── */
+const pxArr=[];
+document.querySelectorAll('[data-parallax]').forEach(el=>{
+  const sec=el.closest('section')||el.parentElement;
+  pxArr.push({el,sec,sp:parseFloat(el.dataset.parallax)});
+});
+function tickPx(){
+  const sy=window.scrollY,vh=window.innerHeight;
+  pxArr.forEach(({el,sec,sp})=>{
+    const r=sec.getBoundingClientRect();
+    el.style.transform=`translateY(${(r.top+r.height/2-vh/2)*sp}px)`;
+  });
+  requestAnimationFrame(tickPx);
+}
+tickPx();
+
+/* ── PARTICLES ── */
+const cvs=document.getElementById('cvs'),ctx=cvs.getContext('2d');
+function rsz(){cvs.width=window.innerWidth;cvs.height=window.innerHeight;}rsz();
+window.addEventListener('resize',rsz);
+const EM=['🐾','🦴','🐕','🐱','💚','⭐','🌿'];
+const pts=Array.from({length:25},()=>({
+  x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,
+  vy:-(0.2+Math.random()*.5),vx:(Math.random()-.5)*.3,
+  sz:14+Math.random()*14,em:EM[Math.floor(Math.random()*EM.length)],
+  a:.1+Math.random()*.2,rot:Math.random()*360,rs:(Math.random()-.5)*.5
+}));
+function drawPts(){
+  ctx.clearRect(0,0,cvs.width,cvs.height);
+  pts.forEach(p=>{
+    ctx.save();ctx.globalAlpha=p.a;ctx.font=p.sz+'px serif';
+    ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);
+    ctx.fillText(p.em,-p.sz/2,p.sz/2);ctx.restore();
+    p.y+=p.vy;p.x+=p.vx;p.rot+=p.rs;
+    if(p.y<-30){p.y=cvs.height+20;p.x=Math.random()*cvs.width;}
+  });
+  requestAnimationFrame(drawPts);
+}
+drawPts();
+
+/* ── SCROLL ANIMATIONS ── */
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting)return;
+    e.target.querySelectorAll('.svc,.pc').forEach((c,i)=>setTimeout(()=>c.classList.add('an'),i*85));
+    e.target.querySelectorAll('.gi').forEach((c,i)=>setTimeout(()=>c.classList.add('an'),i*95));
+    io.unobserve(e.target);
+  });
+},{threshold:.08});
+document.querySelectorAll('section').forEach(s=>io.observe(s));
+
+/* ── COUNTERS ── */
+const cio=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting)return;
+    e.target.querySelectorAll('.sn[data-target]').forEach(el=>{
+      const tg=+el.dataset.target;let cur=0;const step=tg/55;
+      const tick=()=>{cur=Math.min(cur+step,tg);el.textContent=Math.floor(cur)+(tg===98?'%':tg===3500?'+':'');if(cur<tg)requestAnimationFrame(tick);};
+      tick();
+    });
+    cio.unobserve(e.target);
+  });
+},{threshold:.4});
+cio.observe(document.getElementById('hero'));
+
+/* ── PROGRESS BAR ── */
+window.addEventListener('scroll',()=>{
+  const pct=window.scrollY/(document.documentElement.scrollHeight-window.innerHeight)*100;
+  document.getElementById('pb').style.width=pct+'%';
+  document.getElementById('nav').classList.toggle('sc',window.scrollY>50);
+},{passive:true});
+
+/* ── CAROUSEL ── */
+let cur=0;
+const tests=document.querySelectorAll('.test');
+const dc=document.getElementById('cdots');
+tests.forEach((_,i)=>{const d=document.createElement('button');d.className='cd'+(i===0?' ac':'');d.onclick=()=>gt(i);dc.appendChild(d);});
+function gt(n){tests[cur].classList.remove('ac');dc.children[cur].classList.remove('ac');cur=n%tests.length;tests[cur].classList.add('ac');dc.children[cur].classList.add('ac');}
+setInterval(()=>gt(cur+1),4500);
+
+/* ── NAV / HAMBURGER ── */
+document.getElementById('hbg').onclick=()=>document.getElementById('nl2').classList.toggle('op');
+document.querySelectorAll('nav ul a').forEach(a=>a.addEventListener('click',()=>document.getElementById('nl2').classList.remove('op')));
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}}));
+</script>
+</body>
+</html>
