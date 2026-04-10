@@ -24,13 +24,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--ink);ov
 #pb{position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,var(--a3),var(--coral));z-index:9999;transition:width .08s}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:1.3rem 3rem;transition:all .4s;background:transparent}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:1.3rem 3rem;transition:all .4s}
 nav.sc{background:rgba(255,255,255,.96);backdrop-filter:blur(20px);box-shadow:0 2px 30px rgba(30,70,120,.12);padding:.85rem 3rem}
 .nl{font-family:'Playfair Display',serif;font-size:1.65rem;font-weight:700;color:var(--w);text-decoration:none;display:flex;align-items:center;gap:.5rem}
 nav.sc .nl{color:var(--ink)}
 .nl:hover{color:var(--a3)}
 nav ul{display:flex;gap:2rem;list-style:none;align-items:center}
-nav ul a{text-decoration:none;font-size:.87rem;font-weight:500;color:rgba(255,255,255,.9);letter-spacing:.04em;position:relative;transition:color .3s}
+nav ul a{text-decoration:none;font-size:.87rem;font-weight:500;color:rgba(255,255,255,.85);letter-spacing:.04em;position:relative;transition:color .3s}
 nav.sc ul a{color:var(--ink2)}
 nav ul a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:2px;background:var(--a2);transform:scaleX(0);transition:transform .3s;transform-origin:right}
 nav ul a:hover{color:var(--w)}
@@ -277,118 +277,7 @@ footer span{color:var(--a3)}
 .mcl{background:var(--dark2);border:1px solid rgba(45,134,200,.15);border-radius:50px;padding:.85rem 1.5rem;color:var(--ink2);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.9rem;transition:background .3s}
 .mcl:hover{background:var(--dark3)}
 
-/* ── GALERÍA DE FOTOS ── */
-#fotoGrid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  grid-template-rows:240px 240px;
-  gap:.9rem;
-}
-.fg-item{
-  border-radius:16px;overflow:hidden;position:relative;
-  background:var(--dark3);cursor:pointer;
-  box-shadow:0 3px 18px rgba(30,70,120,.1);
-  opacity:0;transform:scale(.92);
-  transition:transform .4s,box-shadow .4s;
-}
-.fg-item.vis{opacity:1;transform:scale(1);animation:fgIn .5s ease forwards}
-@keyframes fgIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
-.fg-item:hover{transform:scale(1.03);box-shadow:0 16px 45px rgba(30,70,120,.2);z-index:3}
-.fg-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
-.fg-item:hover img{transform:scale(1.08)}
-.fg-label{
-  position:absolute;inset:0;
-  background:linear-gradient(to top,rgba(15,30,60,.75) 0%,transparent 55%);
-  display:flex;align-items:flex-end;padding:1rem 1.1rem;
-  opacity:0;transition:opacity .35s;
-}
-.fg-item:hover .fg-label{opacity:1}
-.fg-label span{color:white;font-size:.82rem;font-weight:600}
-/* Celdas especiales */
-.fg-tall{grid-row:span 2}   /* ocupa las 2 filas */
-.fg-wide{grid-column:span 2} /* ocupa 2 columnas */
-/* Responsive */
-@media(max-width:900px){
-  #fotoGrid{grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(5,170px)}
-  .fg-tall,.fg-wide{grid-row:span 1;grid-column:span 1}
-}
-@media(max-width:480px){
-  #fotoGrid{grid-template-columns:1fr 1fr;grid-template-rows:repeat(5,140px);gap:.6rem}
-  #galeria-fotos{padding:4rem 1.2rem}
-}
-
-/* ── NUEVO CARRUSEL TESTIMONIOS ── */
-#testimonios{background:linear-gradient(135deg,#dbeafe 0%,#e0f2fe 50%,#d0e6f5 100%)}
-#testimonios .pbg{opacity:.06}
-#testimonios .pov{background:transparent}
-.tcard-track{
-  position:relative;
-  margin-top:3rem;
-  overflow:hidden;
-}
-.tcard-inner{
-  display:flex;
-  gap:1.5rem;
-  transition:transform .55s cubic-bezier(.4,0,.2,1);
-  will-change:transform;
-  align-items:stretch;
-}
-/* Cada tarjeta ocupa exactamente 1/N del track según cuántas se muestran */
-.tcard{
-  /* width se setea por JS según cuántas tarjetas visibles */
-  flex-shrink:0;
-  background:var(--w);border-radius:20px;
-  padding:2rem 2.2rem;
-  box-shadow:0 6px 30px rgba(30,70,120,.11);
-  border:1px solid rgba(45,134,200,.1);
-  position:relative;
-  box-sizing:border-box;
-}
-.tcard::before{
-  content:'"';
-  position:absolute;top:-8px;left:1.4rem;
-  font-family:'Playfair Display',serif;
-  font-size:4.5rem;line-height:1;
-  color:var(--a3);opacity:.2;
-}
-.tcard-stars{font-size:1rem;margin-bottom:1rem;letter-spacing:.06em}
-.tcard-text{
-  font-family:'Playfair Display',serif;
-  font-style:italic;font-size:1rem;line-height:1.7;
-  color:var(--ink);margin-bottom:1.5rem;
-}
-.tcard-author{display:flex;align-items:center;gap:.9rem}
-.tcard-av{
-  width:46px;height:46px;border-radius:50%;
-  background:linear-gradient(135deg,var(--a2),var(--a3));
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.3rem;flex-shrink:0;
-}
-.tcard-name{font-weight:700;color:var(--ink);font-size:.9rem}
-.tcard-pet{color:var(--ink2);font-size:.78rem}
-.tcard-controls{
-  display:flex;align-items:center;justify-content:center;
-  gap:1rem;margin-top:2rem;
-}
-.tcard-btn{
-  width:40px;height:40px;border-radius:50%;
-  border:1.5px solid rgba(45,134,200,.3);
-  background:var(--w);color:var(--a2);
-  font-size:1.1rem;cursor:pointer;
-  transition:all .25s;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 2px 12px rgba(30,70,120,.1);
-}
-.tcard-btn:hover{background:var(--a2);color:white;border-color:var(--a2)}
-.tcard-dots{display:flex;gap:.5rem;align-items:center}
-.tcard-dot{
-  width:8px;height:8px;border-radius:50%;
-  background:rgba(45,134,200,.25);border:none;cursor:pointer;transition:all .3s;
-}
-.tcard-dot.on{background:var(--a2);transform:scale(1.4)}
-@media(max-width:700px){
-  .tcard{padding:1.5rem}
-}
-
+/* ANIMATIONS */
 @keyframes fup{from{opacity:0;transform:translateY(35px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fdw{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fi{from{opacity:0}to{opacity:1}}
@@ -434,7 +323,6 @@ footer span{color:var(--a3)}
     <li><a href="#servicios">Servicios</a></li>
     <li><a href="#tienda">Tienda</a></li>
     <li><a href="#galeria">Animales</a></li>
-    <li><a href="#galeria-fotos">Galería</a></li>
     <li><a href="#testimonios">Testimonios</a></li>
     <li><a href="#nosotros">Nosotros</a></li>
     <li><a href="#contacto" class="ncta">Contactar</a></li>
@@ -523,57 +411,19 @@ footer span{color:var(--a3)}
   </div>
 </div>
 
-<!-- GALERÍA DE FOTOS -->
-<section id="galeria-fotos" style="min-height:auto;background:var(--dark2);padding:5rem 3rem">
-  <div style="max-width:1200px;margin:0 auto">
-    <span class="slb">Nuestros pacientes</span>
-    <h2 class="st">Galería de <span style="color:var(--a2)">casos y pacientes</span></h2>
-    <p class="ss" style="margin-bottom:3rem">Momentos capturados de nuestros pacientes más especiales.</p>
-    <!-- GRID MASONRY SIMÉTRICO 9 imágenes -->
-    <div id="fotoGrid"></div>
-  </div>
-</section>
-
 <!-- TESTIMONIOS -->
 <section id="testimonios">
   <div class="pbg" data-parallax="0.4"></div>
   <div class="pov"></div>
   <div class="si" style="text-align:center">
-    <span class="slb">Lo que dicen de nosotros</span>
-    <h2 class="st">Familias <span style="color:var(--a2)">felices</span></h2>
-    <div class="tcard-track">
-      <div class="tcard-inner" id="tcardInner">
-        <div class="tcard">
-          <div class="tcard-stars">⭐⭐⭐⭐⭐</div>
-          <p class="tcard-text">Llevé a mi loro de emergencia y la atención fue increíble. El Dr. Huitrón lo trató como si fuera suyo. ¡Totalmente recomendado!</p>
-          <div class="tcard-author"><div class="tcard-av">👩</div><div><div class="tcard-name">Mariana López</div><div class="tcard-pet">Dueña de Paco 🦜</div></div></div>
-        </div>
-        <div class="tcard">
-          <div class="tcard-stars">⭐⭐⭐⭐⭐</div>
-          <p class="tcard-text">Mi iguana necesitaba cirugía y el Doctor fue muy profesional. Explicó todo el proceso con mucha paciencia y claridad.</p>
-          <div class="tcard-author"><div class="tcard-av">👨</div><div><div class="tcard-name">Carlos Mendoza</div><div class="tcard-pet">Papá de Spike 🦎</div></div></div>
-        </div>
-        <div class="tcard">
-          <div class="tcard-stars">⭐⭐⭐⭐⭐</div>
-          <p class="tcard-text">Tengo una tortuga, un conejo y un perico. Siempre encuentro atención especializada para cada uno. Un lugar único en CDMX.</p>
-          <div class="tcard-author"><div class="tcard-av">👩‍🦱</div><div><div class="tcard-name">Sofía Ramírez</div><div class="tcard-pet">Dueña de 3 exóticos 🐾</div></div></div>
-        </div>
-        <div class="tcard">
-          <div class="tcard-stars">⭐⭐⭐⭐⭐</div>
-          <p class="tcard-text">Las vacunas de mis pericos siempre al corriente. El equipo es muy organizado y me recuerdan las citas. Excelente servicio.</p>
-          <div class="tcard-author"><div class="tcard-av">🧑</div><div><div class="tcard-name">Roberto Fuentes</div><div class="tcard-pet">Papá de Kiwi y Mango 🦜🦜</div></div></div>
-        </div>
-        <div class="tcard">
-          <div class="tcard-stars">⭐⭐⭐⭐⭐</div>
-          <p class="tcard-text">Mi hurón estaba muy enfermo y ningún veterinario lo atendía. Aquí lo diagnosticaron y trataron perfectamente. ¡Gracias!</p>
-          <div class="tcard-author"><div class="tcard-av">👩‍🔬</div><div><div class="tcard-name">Daniela Cruz</div><div class="tcard-pet">Mamá de Noodle 🐾</div></div></div>
-        </div>
-      </div>
-    </div>
-    <div class="tcard-controls">
-      <button class="tcard-btn" id="tcPrev">‹</button>
-      <div class="tcard-dots" id="tcDots"></div>
-      <button class="tcard-btn" id="tcNext">›</button>
+    <span class="slb">Lo que dicen</span>
+    <h2 class="st">Familias <span style="color:var(--a3)">felices</span></h2>
+    <div class="tw">
+      <div class="test ac"><div class="ts">⭐⭐⭐⭐⭐</div><p class="tt">"Llevé a mi perro Simón de emergencia y la atención fue increíble. El Dr. García lo trató como si fuera suyo."</p><div class="ta"><div class="tav">👩</div><div><div class="tn">Mariana López</div><div class="tp">Dueña de Simón 🐕</div></div></div></div>
+      <div class="test"><div class="ts">⭐⭐⭐⭐⭐</div><p class="tt">"La estética es excelente, mi gata Perla siempre sale preciosa. El trato es muy profesional y cariñoso."</p><div class="ta"><div class="tav">👨</div><div><div class="tn">Carlos Mendoza</div><div class="tp">Papá de Perla 🐱</div></div></div></div>
+      <div class="test"><div class="ts">⭐⭐⭐⭐⭐</div><p class="tt">"Voy con toda mi familia animal: dos perros y un gato. Siempre encuentro excelente atención y precios accesibles."</p><div class="ta"><div class="tav">👩‍🦱</div><div><div class="tn">Sofía Ramírez</div><div class="tp">Dueña de 3 mascotas 🐾</div></div></div></div>
+      <div class="test"><div class="ts">⭐⭐⭐⭐⭐</div><p class="tt">"Las vacunas siempre al corriente, el equipo es muy organizado. Me recuerdan las citas y explican todo con paciencia."</p><div class="ta"><div class="tav">🧑</div><div><div class="tn">Roberto Fuentes</div><div class="tp">Papá de Kira 🐶</div></div></div></div>
+      <div class="cdots" id="cdots"></div>
     </div>
   </div>
 </section>
@@ -588,19 +438,9 @@ footer span{color:var(--a3)}
   <div class="nc">
     <span class="slb">Sobre mi</span>
     <h2 class="st" style="margin-bottom:1.5rem">Mvz Jose Manuel Huitron</h2>
-    <p class="ss"><p>
-    Soy Médico Veterinario Zootecnista y he dedicado mi vida profesional al estudio de las aves y la fauna silvestre. 
-    Me especializo en el manejo reproductivo, la contención física y química, la medicina preventiva y el diagnóstico clínico.
-  </p>
-<br>
-  <p>
-    Realicé una maestría en Ciencias Agropecuarias, enfocada en el estudio de la reproducción aviar, donde participé en diversos proyectos de conservación y reproducción de aves rapaces en colaboración con Reino Animal y el Centro de Educación “Rodolfo Landeros Gallegos”.
-  </p>
-<br>
-  <p>
-    Asimismo, he participado en el acompañamiento y la dirección de alumnos de la licenciatura en Medicina Veterinaria en la UAM-X, dentro de las prácticas de Fauna Silvestre. En estas actividades se llevan a cabo manejo, diagnóstico clínico, tratamientos médicos y manejo reproductivo en aves, principalmente falconiformes y strigiformes, así como en diversas especies silvestres.
-  </p>    
-      <div class="vals">
+    <p class="ss">Soy Médico Veterinario Zootecnista que ha dedicado su vida profesional al estudio de las aves y de la fauna silvestre, donde me especializo en el manejo reproductivo, contención física y química, medicina preventiva y diagnóstico clínico. Realicé una maestría en Ciencias Agropecuarias enfocadas en el estudio de la reproducción aviar, en donde participe en diferentes proyectos de conservación y reproducción de aves rapaces con "Reino Animal" y  El Centro de educación "Rodolfo Landeros Gallegos".
+Así también he estado en el acompañamiento y dirección  para los alumnos de licenciatura en Medicina Veterinaria en UAM-X, en las prácticas  de Fauna Silvestre, en las cuales se realizan actividades de manejo, diagnóstico clínico, tratamientos médicos y manejo reproductivo en aves, principalmente falconiformes y strigiformes y en diferentes especies silvestres.   
+    <div class="vals">
       <div class="vl"><span>❤️</span><strong>Amor por los animales</strong></div>
       <div class="vl"><span>🎓</span><strong>Equipo certificado</strong></div>
       <div class="vl"><span>🏥</span><strong>Instalaciones modernas</strong></div>
@@ -621,11 +461,11 @@ footer span{color:var(--a3)}
     <div class="cg">
       <div class="fb">
         <h3>Envíanos un mensaje</h3>
-        <div class="fg2"><label>Nombre completo</label><input id="fNombre" type="text" placeholder="Ej: María García"></div>
-        <div class="fg2"><label>Teléfono</label><input id="fTel" type="tel" placeholder="55 1234 5678"></div>
+        <div class="fg2"><label>Nombre completo</label><input type="text" placeholder="Ej: María García"></div>
+        <div class="fg2"><label>Teléfono</label><input type="tel" placeholder="55 1234 5678"></div>
         <div class="fg2">
           <label>Animal</label>
-          <select id="fAnimal">
+          <select>
             <option>🐕 Perro</option>
             <option>🐱 Gato</option>
             <option>🐇 Conejo</option>
@@ -639,8 +479,8 @@ footer span{color:var(--a3)}
             <option>🐾 Otro</option>
           </select>
         </div>
-        <div class="fg2"><label>Mensaje</label><textarea id="fMsg" placeholder="Cuéntanos cómo podemos ayudar..."></textarea></div>
-        <button class="bsub" id="btnEnviar" type="button">Enviar por WhatsApp 💬</button>
+        <div class="fg2"><label>Mensaje</label><textarea placeholder="Cuéntanos cómo podemos ayudar..."></textarea></div>
+        <button class="bsub" onclick="this.textContent='✅ ¡Enviado!';setTimeout(()=>this.textContent='Enviar mensaje →',2500)">Enviar mensaje →</button>
       </div>
       <div class="cis">
         <div class="cih"><h3>Visítanos pronto</h3><p>Nuestras puertas siempre están abiertas para ti y tu compañero.</p></div>
@@ -896,139 +736,13 @@ window.addEventListener('scroll',()=>{
   document.getElementById('nav').classList.toggle('sc',window.scrollY>50);
 },{passive:true});
 
-/* ── GALERÍA DE FOTOS ── */
-// Layout: 4 cols × 2 rows fijas = 8 celdas
-// col1 fila1+2 = fg-tall (1 foto alta)
-// col2-3 fila1 = fg-wide (1 foto ancha)
-// col4 fila1   = normal
-// col2 fila2   = normal
-// col3 fila2   = normal
-// col4 fila2   = normal
-// + 2 fotos extra fila2 col 2-3 = fg-wide
-// Total: 9 imágenes en layout perfectamente simétrico
-const fotos = [
-  // Cambia src por tus propias fotos. Label = pie de foto al hover
-  {src:'galeria/buho.jpg',  label:'Consulta felina especializada',  cls:'fg-tall'},
-  {src:'galeria/puerco.jpg', label:'Revisión canina',                 cls:'fg-wide'},
-  {src:'galeria/venado.jpg', label:'Gato persa en consulta',          cls:''},
-  {src:'galeria/loro.jpg',    label:'Paciente recuperado',              cls:''},
-  {src:'galeria/dragon barbudo.jpg', label:'Chequeo rutinario',                cls:'fg-wide'},
-  {src:'galeria/guacamayaarriba.png', label:'Post-cirugía exitosa',             cls:''},
-  {src:'galeria/guacamaya.png', label:'Recuperación feliz',               cls:''},
-  {src:'galeria/aguila.jpg', label:'Ave en tratamiento',               cls:''},
-  {src:'galeria/caballo.jpg', label:'Cuidado especializado',            cls:''},
-];
-
-const fg = document.getElementById('fotoGrid');
-fotos.forEach((f) => {
-  const el = document.createElement('div');
-  el.className = 'fg-item ' + f.cls;
-  el.innerHTML = `
-    <img src="${f.src}" alt="${f.label}" loading="lazy"
-      onerror="this.style.display='none'">
-    <div class="fg-label"><span>${f.label}</span></div>`;
-  fg.appendChild(el);
-});
-
-// Animate on scroll
-const fgObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (!e.isIntersecting) return;
-    e.target.querySelectorAll('.fg-item').forEach((el, i) => {
-      setTimeout(() => el.classList.add('vis'), i * 80);
-    });
-    fgObs.unobserve(e.target);
-  });
-}, {threshold: 0.1});
-const fgSection = document.getElementById('galeria-fotos');
-if (fgSection) fgObs.observe(fgSection);
-
-/* ── NUEVO CARRUSEL DE TESTIMONIOS ── */
-(function(){
-  const track = document.querySelector('.tcard-track');
-  const inner = document.getElementById('tcardInner');
-  const dotsC = document.getElementById('tcDots');
-  if (!inner || !track) return;
-
-  const cards  = Array.from(inner.querySelectorAll('.tcard'));
-  const total  = cards.length;
-  const GAP    = 24; // 1.5rem en px
-  let vis      = 1;  // cuántas tarjetas visibles
-  let cur      = 0;
-  let max      = 0;
-  let autoT    = null;
-
-  function getVis() {
-    const w = window.innerWidth;
-    return w <= 700 ? 1 : w <= 1024 ? 2 : 3;
-  }
-
-  function setWidths() {
-    vis = getVis();
-    max = total - vis;
-    const trackW   = track.clientWidth;
-    const cardW    = (trackW - GAP * (vis - 1)) / vis;
-    cards.forEach(c => { c.style.width = cardW + 'px'; });
-    // Rebuild dots
-    dotsC.innerHTML = '';
-    for (let i = 0; i <= max; i++) {
-      const d = document.createElement('button');
-      d.className = 'tcard-dot' + (i === cur ? ' on' : '');
-      d.addEventListener('click', () => goTo(i));
-      dotsC.appendChild(d);
-    }
-    goTo(Math.min(cur, max));
-  }
-
-  function goTo(n) {
-    cur = Math.max(0, Math.min(n, max));
-    const cardW   = cards[0].getBoundingClientRect().width;
-    const offset  = cur * (cardW + GAP);
-    inner.style.transform = `translateX(-${offset}px)`;
-    dotsC.querySelectorAll('.tcard-dot').forEach((d, i) =>
-      d.classList.toggle('on', i === cur));
-  }
-
-  function startAuto() {
-    stopAuto();
-    autoT = setInterval(() => goTo(cur < max ? cur + 1 : 0), 5000);
-  }
-  function stopAuto() { clearInterval(autoT); }
-
-  document.getElementById('tcPrev').addEventListener('click', () => { goTo(cur - 1); startAuto(); });
-  document.getElementById('tcNext').addEventListener('click', () => { goTo(cur + 1); startAuto(); });
-  inner.addEventListener('mouseenter', stopAuto);
-  inner.addEventListener('mouseleave', startAuto);
-
-  window.addEventListener('resize', setWidths);
-
-  // Init after paint so clientWidth is correct
-  requestAnimationFrame(() => { setWidths(); startAuto(); });
-})();
-
-/* ── FORMULARIO → WHATSAPP ── */
-document.getElementById('btnEnviar').addEventListener('click', function() {
-  const nombre = document.getElementById('fNombre').value.trim();
-  const tel    = document.getElementById('fTel').value.trim();
-  const animal = document.getElementById('fAnimal').value;
-  const msg    = document.getElementById('fMsg').value.trim();
-
-  if (!nombre) { alert('Por favor escribe tu nombre.'); return; }
-  if (!tel)    { alert('Por favor escribe tu teléfono.'); return; }
-
-  const texto = `¡Hola! Quiero agendar una cita 🐾\n\n` +
-    `👤 *Nombre:* ${nombre}\n` +
-    `📞 *Teléfono:* ${tel}\n` +
-    `🐾 *Animal:* ${animal}\n` +
-    (msg ? `💬 *Mensaje:* ${msg}\n` : '') +
-    `\n_Mensaje enviado desde flightvet.com_`;
-
-  const url = `https://wa.me/525585634911?text=${encodeURIComponent(texto)}`;
-  window.open(url, '_blank');
-
-  this.textContent = '✅ ¡Abriendo WhatsApp!';
-  setTimeout(() => this.textContent = 'Enviar por WhatsApp 💬', 3000);
-});
+/* ── CAROUSEL ── */
+let cur=0;
+const tests=document.querySelectorAll('.test');
+const dc=document.getElementById('cdots');
+tests.forEach((_,i)=>{const d=document.createElement('button');d.className='cd'+(i===0?' ac':'');d.onclick=()=>gt(i);dc.appendChild(d);});
+function gt(n){tests[cur].classList.remove('ac');dc.children[cur].classList.remove('ac');cur=n%tests.length;tests[cur].classList.add('ac');dc.children[cur].classList.add('ac');}
+setInterval(()=>gt(cur+1),4500);
 
 /* ── NAV / HAMBURGER ── */
 document.getElementById('hbg').onclick=()=>document.getElementById('nl2').classList.toggle('op');
